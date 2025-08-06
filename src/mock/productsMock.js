@@ -1,0 +1,38 @@
+export const productsMock = [
+  {
+    id: "1",
+    title: "Auriculares Bluetooth",
+    price: 120,
+    description: "Auriculares inalámbricos con excelente calidad de sonido",
+    imageUrl: "https://example.com/auriculares.jpg",
+    stock: 15,
+    category: "electronica",
+  },
+  {
+    id: "2",
+    title: "Camiseta Deportiva",
+    price: 35,
+    description: "Camiseta ligera y transpirable para hacer deporte",
+    imageUrl: "https://example.com/camiseta.jpg",
+    stock: 30,
+    category: "ropa",
+  },
+  {
+    id: "3",
+    title: "Lego",
+    price: 60,
+    description: "Set de bloques de construcción para niños y adultos",
+    imageUrl: "https://example.com/lego.jpg",
+    stock: 10,
+    category: "juguetes",
+  },
+  {
+    id: "4",
+    title: "Reloj Inteligente",
+    price: 250,
+    description: "Reloj con monitoreo de salud y notificaciones",
+    imageUrl: "https://example.com/reloj.jpg",
+    stock: 8,
+    category: "electronica",
+  },
+];
