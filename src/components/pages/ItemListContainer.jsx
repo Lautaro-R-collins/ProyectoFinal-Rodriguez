@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { productsMock } from '../../mock/productsMock.js';
+import CardProduct from '../common/CardProduct.jsx';  
 
 const getProducts = (categoryId) => {
   return new Promise((resolve) => {
@@ -33,13 +34,11 @@ const ItemListContainer = ({ mensaje }) => {
     <div>
       {mensaje && <h2>{mensaje}</h2>}
       <h3>{categoryId ? `Categoría: ${categoryId}` : 'Todos los productos'}</h3>
-      <ul>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
         {products.map(product => (
-          <li key={product.id}>
-            <Link to={`/item/${product.id}`}>{product.title}</Link>
-          </li>
+          <CardProduct key={product.id} product={product} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
