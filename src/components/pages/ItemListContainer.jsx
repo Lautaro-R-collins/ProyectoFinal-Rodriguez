@@ -1,19 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { productsMock } from '../../mock/productsMock.js';
-import CardProduct from '../common/CardProduct.jsx';  
+import CardProduct from '../common/CardProduct.jsx';
 
-const getProducts = (categoryId) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      if (categoryId) {
-        resolve(productsMock.filter(product => product.category === categoryId));
-      } else {
-        resolve(productsMock);
-      }
-    }, 500);
-  });
-};
+import { db } from '../../services/firebaseConfig';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 
 const ItemListContainer = ({ mensaje }) => {
   const { categoryId } = useParams();
@@ -21,11 +11,23 @@ const ItemListContainer = ({ mensaje }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const productsRef = collection(db, 'products');
+    const q = categoryId ? query(productsRef, where('category', '==', categoryId)) : productsRef;
+
     setLoading(true);
-    getProducts(categoryId).then((data) => {
-      setProducts(data);
-      setLoading(false);
-    });
+    getDocs(q)
+      .then((resp) => {
+        const productsFirebase = resp.docs.map((doc) => {
+          return { id: doc.id, ...doc.data() };
+        });
+        setProducts(productsFirebase);
+      })
+      .catch((error) => {
+        console.error('Error cargando productos:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [categoryId]);
 
   if (loading) return <p>Cargando productos...</p>;
@@ -35,7 +37,7 @@ const ItemListContainer = ({ mensaje }) => {
       {mensaje && <h2>{mensaje}</h2>}
       <h3>{categoryId ? `Categoría: ${categoryId}` : 'Todos los productos'}</h3>
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-        {products.map(product => (
+        {products.map((product) => (
           <CardProduct key={product.id} product={product} />
         ))}
       </div>

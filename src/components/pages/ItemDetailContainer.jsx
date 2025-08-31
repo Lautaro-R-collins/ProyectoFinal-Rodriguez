@@ -1,27 +1,35 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { productsMock } from '../../mock/productsMock.js';
-
-const getProductById = (id) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const product = productsMock.find(p => p.id === id);
-      resolve(product);
-    }, 500);
-  });
-};
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import ItemCount from "../common/ItemCount";
+import { db } from "../../services/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import useCart from "../../context/useCart";
 
 const ItemDetailContainer = () => {
   const { itemId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { addItem } = useCart();
 
   useEffect(() => {
+    const productRef = doc(db, "products", itemId);
+
     setLoading(true);
-    getProductById(itemId).then((prod) => {
-      setProduct(prod);
-      setLoading(false);
-    });
+    getDoc(productRef)
+      .then((resp) => {
+        if (resp.exists()) {
+          setProduct({ id: resp.id, ...resp.data() });
+        } else {
+          setProduct(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Error cargando producto:", error);
+        setProduct(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [itemId]);
 
   if (loading) return <p>Cargando detalle del producto...</p>;
@@ -34,6 +42,13 @@ const ItemDetailContainer = () => {
       <p>{product.description}</p>
       <p>Precio: ${product.price}</p>
       <p>Stock disponible: {product.stock}</p>
+      <ItemCount
+        stock={product.stock}
+        initial={1}
+        onAdd={(quantity) => {
+          addItem(product, quantity);
+        }}
+      />
     </div>
   );
 };
