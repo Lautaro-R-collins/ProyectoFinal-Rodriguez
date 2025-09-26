@@ -13,7 +13,7 @@ const Footer = () => {
 
         {/* Derechos */}
         <p className="text-center sm:text-right text-sm text-gray-400">
-          © {new Date().getFullYear()} Tu Empresa. Todos los derechos reservados.
+          © {new Date().getFullYear()} Urban Style. Todos los derechos reservados.
         </p>
       </div>
     </footer>
