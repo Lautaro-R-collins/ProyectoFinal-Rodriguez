@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const ItemCount = ({ stock, initial = 1, onAdd }) => {
   const [count, setCount] = useState(initial);
-  const [added, setAdded] = useState(false);
+  const [added] = useState(false);
 
   const increment = () => {
     if (count < stock) setCount(count + 1);
@@ -15,8 +16,13 @@ const ItemCount = ({ stock, initial = 1, onAdd }) => {
 
   const handleAdd = () => {
     onAdd(count);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+    toast.success(
+      `¡Agregaste ${count} ${count > 1 ? "productos" : "producto"} al carrito!`,
+      {
+        position: "top-right",
+        autoClose: 3000,
+      }
+    );
   };
 
   return (
