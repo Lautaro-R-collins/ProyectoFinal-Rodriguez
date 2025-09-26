@@ -11,6 +11,8 @@ import CarruselImg from "./components/common/CarruselImg";
 import Features from "./components/common/Features.jsx";
 import HomeBanner from "./components/common/HomeBanner.jsx";
 import BackFeatures from "./components/common/BackFeatures.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -81,7 +83,7 @@ function App() {
           }
         />
       </Routes>
-      
+      <ToastContainer position="top-right" autoClose={2000} />
     </BrowserRouter>
     
   );
