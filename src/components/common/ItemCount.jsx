@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FaPlus, FaMinus } from "react-icons/fa";
 
 const ItemCount = ({ stock, initial = 1, onAdd }) => {
   const [count, setCount] = useState(initial);
@@ -24,16 +25,16 @@ const ItemCount = ({ stock, initial = 1, onAdd }) => {
       <div className="flex items-center gap-4">
         <button
           onClick={decrement}
-          className="bg-gray-200 text-gray-800 font-bold px-3 py-1 rounded hover:bg-gray-300 transition-colors cursor-pointer"
+          className="bg-[#E6CA4D] text-black font-bold px-3 py-3 rounded hover:bg-red-400 transition-colors cursor-pointer"
         >
-          -
+          <FaMinus />
         </button>
         <span className="text-lg font-semibold">{count}</span>
         <button
           onClick={increment}
-          className="bg-gray-200 text-gray-800 font-bold px-3 py-1 rounded hover:bg-gray-300 transition-colors cursor-pointer"
+          className="bg-[#E6CA4D] text-black font-bold px-3 py-3 rounded hover:bg-green-500 transition-colors cursor-pointer"
         >
-          +
+          <FaPlus />
         </button>
       </div>
 
@@ -44,7 +45,7 @@ const ItemCount = ({ stock, initial = 1, onAdd }) => {
         className={`px-4 py-2 font-semibold rounded-md transition-colors ${
           stock === 0
             ? "bg-gray-400 cursor-not-allowed"
-            : "bg-[#E6CA4D] hover:bg-yellow-500 text-black cursor-pointer"
+            : "bg-[#E6CA4D] hover:bg-[#f0cd34] text-black cursor-pointer"
         }`}
       >
         Agregar al carrito
