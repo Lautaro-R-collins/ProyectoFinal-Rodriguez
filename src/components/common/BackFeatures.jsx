@@ -13,7 +13,7 @@ const featuresData = [
     id: 2,
     icon: FaTruck,
     title: "Envío gratis",
-    description: "En todos nuestros productos a partir de 5.000$",
+    description: "Tenes envio sin costo en todos nuestros productos a partir de 5.000$",
   },
   {
     id: 3,
