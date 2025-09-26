@@ -54,13 +54,13 @@ const ItemDetailContainer = () => {
         </div>
 
         {/* Detalles */}
-        <div className="lg:w-1/2 flex flex-col gap-6">
+        <div className="lg:w-1/2 flex flex-col gap-3">
           <p className="text-gray-700 text-lg">{product.description}</p>
           <p className="text-2xl font-bold text-black">Precio: ${product.price}</p>
-          <p className="text-gray-500">Stock disponible: {product.stock}</p>
+          <p className="text-gray-500 text-xl">Stock disponible: {product.stock}</p>
 
           {/* Contador y botón agregar al carrito */}
-          <div className="mt-4">
+          <div className="mt-1">
             <ItemCount
               stock={product.stock}
               initial={1}
