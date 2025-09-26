@@ -32,8 +32,16 @@ const ItemDetailContainer = () => {
       });
   }, [itemId]);
 
-  if (loading) return <p className="text-center py-10">Cargando detalle del producto...</p>;
-  if (!product) return <p className="text-center py-10">Producto no encontrado</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[70vh] flex-col gap-8">
+        <p className="text-4xl text-black font-bold">Cargando el producto</p>
+        <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  if (!product)
+    return <p className="text-center py-10">Producto no encontrado</p>;
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-10">
@@ -56,8 +64,12 @@ const ItemDetailContainer = () => {
         {/* Detalles */}
         <div className="lg:w-1/2 flex flex-col gap-3">
           <p className="text-gray-700 text-lg">{product.description}</p>
-          <p className="text-2xl font-bold text-black">Precio: ${product.price}</p>
-          <p className="text-gray-500 text-xl">Stock disponible: {product.stock}</p>
+          <p className="text-2xl font-bold text-black">
+            Precio: ${product.price}
+          </p>
+          <p className="text-gray-500 text-xl">
+            Stock disponible: {product.stock}
+          </p>
 
           {/* Contador y botón agregar al carrito */}
           <div className="mt-1">
