@@ -23,7 +23,10 @@ const ItemListContainer = ({ mensaje }) => {
     setLoading(true);
     getDocs(q)
       .then((resp) => {
-        const productsFirebase = resp.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const productsFirebase = resp.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
         setProducts(productsFirebase);
         setCurrentPage(1); // Resetear a la página 1 si cambio categoría
       })
@@ -31,7 +34,14 @@ const ItemListContainer = ({ mensaje }) => {
       .finally(() => setLoading(false));
   }, [categoryId]);
 
-  if (loading) return <p className="text-center py-10">Cargando productos...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[70vh] flex-col gap-8">
+        <p className="text-4xl text-black font-bold">Cargando Productos</p>
+        <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   // Cálculo del slice de productos para la página actual
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -43,18 +53,24 @@ const ItemListContainer = ({ mensaje }) => {
 
   return (
     <div>
-      {mensaje && <h2 className="text-xl font-medium text-center mb-6">{mensaje}</h2>}
+      {mensaje && (
+        <h2 className="text-xl font-medium text-center mb-6">{mensaje}</h2>
+      )}
 
-      <div className={`relative mb-10 ${
-        categoryId
-          ? "bg-[url('https://wallpapers.com/images/hd/black-brick-wall-tiles-rc0x6jehi7y9xd0c.jpg')] bg-cover bg-center h-60 flex items-center justify-center"
-          : "bg-gray-100 py-5 px-6"
-      }`}>
-        <h3 className={`font-bold text-center ${
+      <div
+        className={`relative mb-10 ${
           categoryId
-            ? "text-white drop-shadow-md font-['Sedgwick_Ave_Display'] text-6xl lg:text-9xl"
-            : "text-black text-2xl sm:text-3xl lg:text-4xl"
-        }`}>
+            ? "bg-[url('https://wallpapers.com/images/hd/black-brick-wall-tiles-rc0x6jehi7y9xd0c.jpg')] bg-cover bg-center h-60 flex items-center justify-center"
+            : "bg-gray-100 py-5 px-6"
+        }`}
+      >
+        <h3
+          className={`font-bold text-center ${
+            categoryId
+              ? "text-white drop-shadow-md font-['Sedgwick_Ave_Display'] text-6xl lg:text-9xl"
+              : "text-black text-2xl sm:text-3xl lg:text-4xl"
+          }`}
+        >
           {categoryId ? categoryId : "Todos los productos"}
         </h3>
       </div>
@@ -62,7 +78,10 @@ const ItemListContainer = ({ mensaje }) => {
       {/* GRID responsive */}
       <div className="flex flex-wrap justify-center gap-6 px-4 sm:px-6 lg:px-10 mb-6">
         {currentProducts.map((product) => (
-          <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex justify-center" key={product.id}>
+          <div
+            className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex justify-center"
+            key={product.id}
+          >
             <CardProduct product={product} />
           </div>
         ))}
@@ -75,7 +94,11 @@ const ItemListContainer = ({ mensaje }) => {
             <button
               key={i}
               onClick={() => setCurrentPage(i + 1)}
-              className={`px-4 cursor-pointer py-2 rounded ${currentPage === i + 1 ? "bg-yellow-400 text-black" : "bg-gray-200 text-black hover:bg-gray-300"}`}
+              className={`px-4 cursor-pointer py-2 rounded ${
+                currentPage === i + 1
+                  ? "bg-yellow-400 text-black font-bold"
+                  : "bg-gray-300 text-black hover:bg-gray-300"
+              }`}
             >
               {i + 1}
             </button>
