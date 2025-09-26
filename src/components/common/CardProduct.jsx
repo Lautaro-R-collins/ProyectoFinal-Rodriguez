@@ -1,49 +1,34 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const CardProduct = ({ product }) => {
   return (
-    <div style={styles.card}>
+    <div className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-xs w-full flex flex-col">
       <img
-        src={product.imageUrl || 'https://via.placeholder.com/150'}
+        src={product.imageUrl || "https://via.placeholder.com/300x200"}
         alt={product.title}
-        style={styles.image}
+        className="w-full h-full sm:h-56 object-contain bg-gray-100"
       />
-      <h3>{product.title}</h3>
-      <p>Precio: ${product.price}</p>
-      <p>Stock: {product.stock}</p>
-      <Link to={`/item/${product.id}`} style={styles.button}>
-        Ver detalle
-      </Link>
+      {/* Contenido */}
+      <div className="p-4 flex flex-col justify-between flex-1">
+        {/* Título y precio */}
+        <div className="mb-4">
+          <h3 className="text-lg sm:text-xl font-semibold text-black mb-1">
+            {product.title}
+          </h3>
+          <p className="text-black font-bold text-lg">${product.price}</p>
+          <p className="text-gray-500 text-sm mt-1">Stock: {product.stock}</p>
+        </div>
+
+        {/* Botón de ver detalle */}
+        <Link
+          to={`/item/${product.id}`}
+          className="py-2 rounded-md font-semibold bg-[#E6CA4D] text-black text-center hover:bg-yellow-400 transition-colors duration-200"
+        >
+          Ver detalle
+        </Link>
+      </div>
     </div>
   );
-};
-
-const styles = {
-  card: {
-    border: '1px solid #ddd',
-    borderRadius: '8px',
-    padding: '1rem',
-    margin: '1rem',
-    maxWidth: '220px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
-    textAlign: 'center',
-  },
-  image: {
-    width: '100%',
-    height: '150px',
-    objectFit: 'cover',
-    borderRadius: '6px',
-  },
-  button: {
-    marginTop: '0.75rem',
-    display: 'inline-block',
-    padding: '0.5rem 1rem',
-    backgroundColor: '#61dafb',
-    color: '#000',
-    textDecoration: 'none',
-    borderRadius: '4px',
-    fontWeight: '600',
-  },
 };
 
 export default CardProduct;

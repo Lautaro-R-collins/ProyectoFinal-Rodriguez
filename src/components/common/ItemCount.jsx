@@ -15,47 +15,49 @@ const ItemCount = ({ stock, initial = 1, onAdd }) => {
   const handleAdd = () => {
     onAdd(count);
     setAdded(true);
-    setTimeout(() => setAdded(false), 2000); // el mensaje dura 2 segundos
+    setTimeout(() => setAdded(false), 2000);
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.controls}>
-        <button onClick={decrement}>-</button>
-        <span>{count}</span>
-        <button onClick={increment}>+</button>
+    <div className="mt-4 flex flex-col items-start gap-3">
+      {/* Controles */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={decrement}
+          className="bg-gray-200 text-gray-800 font-bold px-3 py-1 rounded hover:bg-gray-300 transition-colors cursor-pointer"
+        >
+          -
+        </button>
+        <span className="text-lg font-semibold">{count}</span>
+        <button
+          onClick={increment}
+          className="bg-gray-200 text-gray-800 font-bold px-3 py-1 rounded hover:bg-gray-300 transition-colors cursor-pointer"
+        >
+          +
+        </button>
       </div>
+
+      {/* Botón agregar al carrito */}
       <button
         onClick={handleAdd}
         disabled={stock === 0}
-        style={styles.addButton}
+        className={`px-4 py-2 font-semibold rounded-md transition-colors ${
+          stock === 0
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-[#E6CA4D] hover:bg-yellow-500 text-black cursor-pointer"
+        }`}
       >
         Agregar al carrito
       </button>
-      {added && <p style={styles.confirmMessage}>¡Producto agregado al carrito!</p>}
+
+      {/* Mensaje de confirmación */}
+      {added && (
+        <p className="text-green-600 font-bold mt-2 animate-pulse">
+          ¡Producto agregado al carrito!
+        </p>
+      )}
     </div>
   );
-};
-
-const styles = {
-  container: { marginTop: "1rem" },
-  controls: {
-    display: "flex",
-    gap: "1rem",
-    marginBottom: "0.5rem",
-  },
-  addButton: {
-    padding: "0.5rem 1rem",
-    backgroundColor: "#61dafb34",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
-  confirmMessage: {
-    marginTop: "0.5rem",
-    color: "green",
-    fontWeight: "bold",
-  },
 };
 
 export default ItemCount;
