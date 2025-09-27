@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { db } from "../../services/firebaseConfig";
 import { collection, addDoc, Timestamp } from "firebase/firestore";
 import useCart from "../../context/useCart";
@@ -61,57 +61,61 @@ const CheckoutForm = () => {
   return (
     <>
       {/* Formulario */}
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-2xl my-10 flex flex-col gap-4"
-      >
-        <h2 className="text-4xl font-bold text-center mb-4">Finalizar compra</h2>
-        {error && <p className="text-red-500 font-semibold">{error}</p>}
-
-        <label className="flex flex-col text-gray-700 font-medium">
-          Nombre completo:
-          <input
-            type="text"
-            name="name"
-            value={buyer.name}
-            onChange={handleChange}
-            className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            required
-          />
-        </label>
-
-        <label className="flex flex-col text-gray-700 font-medium">
-          Email:
-          <input
-            type="email"
-            name="email"
-            value={buyer.email}
-            onChange={handleChange}
-            className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            required
-          />
-        </label>
-
-        <label className="flex flex-col text-gray-700 font-medium">
-          Teléfono:
-          <input
-            type="tel"
-            name="phone"
-            value={buyer.phone}
-            onChange={handleChange}
-            className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            required
-          />
-        </label>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 cursor-pointer bg-yellow-400 text-black rounded-md font-semibold hover:bg-yellow-500 transition-colors"
+      <div className="px-2">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-md mx-auto  p-6 bg-white rounded-xl shadow-2xl my-10 flex flex-col gap-4"
         >
-          {loading ? "Procesando..." : "Confirmar compra"}
-        </button>
-      </form>
+          <h2 className="text-4xl font-bold text-center mb-4">
+            Finalizar compra
+          </h2>
+          {error && <p className="text-red-500 font-semibold">{error}</p>}
+
+          <label className="flex flex-col text-gray-700 font-medium">
+            Nombre completo:
+            <input
+              type="text"
+              name="name"
+              value={buyer.name}
+              onChange={handleChange}
+              className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              required
+            />
+          </label>
+
+          <label className="flex flex-col text-gray-700 font-medium">
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={buyer.email}
+              onChange={handleChange}
+              className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              required
+            />
+          </label>
+
+          <label className="flex flex-col text-gray-700 font-medium">
+            Teléfono:
+            <input
+              type="tel"
+              name="phone"
+              value={buyer.phone}
+              onChange={handleChange}
+              className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              required
+            />
+          </label>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 cursor-pointer bg-yellow-400 text-black rounded-md font-semibold hover:bg-yellow-500 transition-colors"
+          >
+            {loading ? "Procesando..." : "Confirmar compra"}
+          </button>
+        </form>
+      </div>
 
       {/* Modal de confirmación */}
       {modalOpen && (
@@ -119,12 +123,13 @@ const CheckoutForm = () => {
           <div className="bg-white rounded-xl p-8 max-w-sm text-center shadow-lg">
             <h2 className="text-2xl font-bold mb-4">¡Gracias por tu compra!</h2>
             <p className="text-lg mb-6">
-              Tu número de orden es: <strong className="bg-amber-400">{orderId}</strong>
+              Tu número de orden es:{" "}
+              <strong className="bg-amber-400">{orderId}</strong>
             </p>
             <button
               onClick={() => {
                 setModalOpen(false);
-                navigate("/"); 
+                navigate("/");
               }}
               className="px-4 cursor-pointer py-2 bg-yellow-400 text-black rounded-md font-semibold hover:bg-yellow-500 transition-colors"
             >
