@@ -4,11 +4,13 @@ import ItemCount from "../common/ItemCount";
 import { db } from "../../services/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import useCart from "../../context/useCart";
+import { toast } from "react-toastify";
 
 const ItemDetailContainer = () => {
   const { itemId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [selectedSize, setSelectedSize] = useState(""); // talle seleccionado
   const { addItem } = useCart();
 
   useEffect(() => {
@@ -27,9 +29,7 @@ const ItemDetailContainer = () => {
         console.error("Error cargando producto:", error);
         setProduct(null);
       })
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }, [itemId]);
 
   if (loading) {
@@ -38,7 +38,7 @@ const ItemDetailContainer = () => {
         <p className="text-2xl sm:text-4xl text-black font-bold">
           Cargando el producto
         </p>
-        <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-16 h-16 border-4 border-[#E6CA4D] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -46,14 +46,27 @@ const ItemDetailContainer = () => {
   if (!product)
     return <p className="text-center py-10">Producto no encontrado</p>;
 
+  const handleAddToCart = (quantity) => {
+    if (product.sizes && !selectedSize) {
+      toast.error("Por favor selecciona un talle");
+      return;
+    }
+
+    addItem({ ...product, selectedSize }, quantity);
+    toast.success(`${product.title} agregado al carrito!`, {
+      position: "top-right",
+      autoClose: 2000,
+    });
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-10">
-      {/* Título centrado */}
+      {/* Título */}
       <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-center mb-10">
         {product.title}
       </h2>
 
-      {/* Contenedor principal */}
+      {/* Contenedor */}
       <div className="flex flex-col lg:flex-row gap-10 items-start">
         {/* Imagen */}
         <div className="lg:w-1/2 flex justify-center">
@@ -67,33 +80,43 @@ const ItemDetailContainer = () => {
         {/* Detalles */}
         <div className="lg:w-1/2 flex flex-col gap-3">
           <p className="text-gray-700 text-lg">{product.description}</p>
-
-          {/* Precio con rebaja */}
-          {product.discountPrice ? (
-            <div className="flex items-center gap-3">
-              <p className="text-xl text-gray-500 line-through">
-                ${product.price}
-              </p>
-              <p className="text-2xl font-bold text-green-600">
-                ${product.discountPrice}
-              </p>
-            </div>
-          ) : (
+          <div className="flex flex-row gap-2">
             <p className="text-2xl font-bold text-black">
               Precio: ${product.price}
             </p>
+            <p className=" text-sm text-green-600 font-bold">
+              Stock disponible: {product.stock} 
+            </p>
+          </div> 
+
+          {/* Selector de talles */}
+          {product.sizes && product.sizes.length > 0 && (
+            <div >
+              <p className="font-semibold mb-1">Selecciona tu talle:</p>
+              <div className="flex gap-2 flex-wrap">
+                {product.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`px-3 py-1 cursor-pointer border rounded ${
+                      selectedSize === size
+                        ? "bg-[#E6CA4D] border-[#e0c02f]"
+                        : "bg-white border-gray-300 hover:bg-gray-100"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
 
-          <p className="text-gray-500 text-xl">
-            Stock disponible: {product.stock}
-          </p>
-
-          {/* Contador y botón agregar al carrito */}
-          <div className="mt-1">
+          {/* Contador y botón agregar */}
+          <div className="mt-4">
             <ItemCount
               stock={product.stock}
               initial={1}
-              onAdd={(quantity) => addItem(product, quantity)}
+              onAdd={handleAddToCart}
             />
           </div>
         </div>

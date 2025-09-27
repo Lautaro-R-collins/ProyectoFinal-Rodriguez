@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa";
-import { toast } from "react-toastify";
 
 const ItemCount = ({ stock, initial = 1, onAdd }) => {
   const [count, setCount] = useState(initial);
-  const [added] = useState(false);
 
   const increment = () => {
     if (count < stock) setCount(count + 1);
@@ -15,18 +13,11 @@ const ItemCount = ({ stock, initial = 1, onAdd }) => {
   };
 
   const handleAdd = () => {
-    onAdd(count);
-    toast.success(
-      `¡Agregaste ${count} ${count > 1 ? "productos" : "producto"} al carrito!`,
-      {
-        position: "top-right",
-        autoClose: 3000,
-      }
-    );
+    onAdd(count); 
   };
 
   return (
-    <div className="mt-4 flex flex-col items-start gap-3">
+    <div className=" flex flex-row items-start gap-3">
       {/* Controles */}
       <div className="flex items-center gap-4">
         <button
@@ -56,13 +47,6 @@ const ItemCount = ({ stock, initial = 1, onAdd }) => {
       >
         Agregar al carrito
       </button>
-
-      {/* Mensaje de confirmación */}
-      {added && (
-        <p className="text-green-600 font-bold mt-2 animate-pulse">
-          ¡Producto agregado al carrito!
-        </p>
-      )}
     </div>
   );
 };

@@ -1,10 +1,13 @@
+// src/components/common/CardProduct.jsx
 import { Link } from "react-router-dom";
 
 const CardProduct = ({ product }) => {
-  const hasDiscount = product.discountPrice && product.discountPrice < product.price;
+  const hasDiscount =
+    product.discountPrice && product.discountPrice < product.price;
 
   return (
-    <div className="bg-white rounded-xl shadow-2xl overflow-hidden max-w-xs w-full flex flex-col">
+    <div className="relative bg-white rounded-xl shadow-2xl overflow-hidden max-w-xs w-full flex flex-col">
+      {/* Imagen */}
       <img
         src={product.imageUrl || "https://via.placeholder.com/300x200"}
         alt={product.title}
@@ -32,7 +35,9 @@ const CardProduct = ({ product }) => {
             <p className="text-black font-bold text-lg">${product.price}</p>
           )}
 
-          <p className="text-gray-500 text-sm mt-1">Stock: {product.stock}</p>
+          <p className="text-gray-500 text-sm mt-1">
+            Stock: {product.stock}
+          </p>
         </div>
 
         {/* Botón de ver detalle */}
