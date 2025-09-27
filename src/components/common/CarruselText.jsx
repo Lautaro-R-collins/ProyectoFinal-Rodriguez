@@ -12,7 +12,7 @@ function CarruselText() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % dataCarrusel.length);
-    }, 8000); // Cambia de mensaje cada 6 segundos
+    }, 5000); 
 
     return () => clearInterval(interval);
   }, []);
