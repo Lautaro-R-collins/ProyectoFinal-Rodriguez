@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from "./components/common/NavBar.jsx";
 import MainLayout from "./components/layout/MainLayout.jsx";
+import DiscountSlider from "./components/common/DiscountSlider.jsx";
 import ItemListContainer from "./components/pages/ItemListContainer";
 import ItemDetailContainer from "./components/pages/ItemDetailContainer";
 import NotFound from "./components/pages/NotFound";
@@ -17,9 +18,9 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <BrowserRouter>
-    <CarruselText />
+    
       <NavBar />
-      
+      <CarruselText />
       <Routes>
         {/* Ruta Home */}
         <Route
@@ -27,7 +28,7 @@ function App() {
           element={
             <MainLayout>
               <CarruselImg />
-              <Features />
+              <DiscountSlider />
               <ItemListContainer />
               <HomeBanner />
               <BackFeatures />
