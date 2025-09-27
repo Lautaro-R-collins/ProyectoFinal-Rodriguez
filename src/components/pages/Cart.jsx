@@ -1,21 +1,22 @@
 import useCart from "../../context/useCart";
 import { Link } from "react-router-dom";
-import { FaTimes , FaTrashAlt} from "react-icons/fa";
+import { FaTimes, FaTrashAlt } from "react-icons/fa";
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const { cart, removeItem, clearCart } = useCart();
 
-  const totalPrice = cart.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
-    0
-  );
+  // Calcular total considerando el precio con descuento si existe
+  const totalPrice = cart.reduce((acc, item) => {
+    const priceToUse = item.product.discountPrice || item.product.price;
+    return acc + priceToUse * item.quantity;
+  }, 0);
 
   return (
     <>
       {isOpen && (
         <div
           onClick={onClose}
-         className="fixed inset-0 bg-black/40 z-[9998]"
+          className="fixed inset-0 bg-black/40 z-[9998]"
         />
       )}
 
@@ -46,28 +47,50 @@ const CartDrawer = ({ isOpen, onClose }) => {
               </Link>
             </div>
           ) : (
-            cart.map((item) => (
-              <div key={item.product.id} className="flex gap-3 items-center border-b pb-2">
-                <img
-                  src={item.product.imageUrl}
-                  alt={item.product.title}
-                  className="w-16 h-16 object-cover rounded"
-                />
-                <div className="flex-1 flex flex-col">
-                  <span className="font-semibold">{item.product.title}</span>
-                  <span className="text-gray-500 text-sm">Cantidad: {item.quantity}</span>
-                  <span className="text-gray-700 font-bold">
-                    ${item.product.price * item.quantity}
-                  </span>
-                </div>
-                <button
-                  onClick={() => removeItem(item.product.id)}
-                  className="text-red-500 hover:text-red-700 font-bold cursor-pointer"
+            cart.map((item) => {
+              const priceToUse =
+                item.product.discountPrice || item.product.price;
+              return (
+                <div
+                  key={item.product.id}
+                  className="flex gap-3 items-center border-b pb-2"
                 >
-                 <FaTrashAlt size={20}/>
-                </button>
-              </div>
-            ))
+                  <img
+                    src={item.product.imageUrl}
+                    alt={item.product.title}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                  <div className="flex-1 flex flex-col">
+                    <span className="font-semibold">{item.product.title}</span>
+                    <span className="text-gray-500 text-sm">
+                      Cantidad: {item.quantity}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      {item.product.discountPrice ? (
+                        <>
+                          <span className="text-gray-500 line-through text-sm">
+                            ${item.product.price * item.quantity}
+                          </span>
+                          <span className="text-green-600 font-bold">
+                            ${priceToUse * item.quantity}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-gray-700 font-bold">
+                          ${priceToUse * item.quantity}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => removeItem(item.product.id)}
+                    className="text-red-500 hover:text-red-700 font-bold cursor-pointer"
+                  >
+                    <FaTrashAlt size={20} />
+                  </button>
+                </div>
+              );
+            })
           )}
         </div>
 

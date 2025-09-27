@@ -27,7 +27,7 @@ const CardProduct = ({ product }) => {
               <p className="text-gray-500 line-through text-sm">
                 ${product.price}
               </p>
-              <p className="text-red-600 font-bold text-lg">
+              <p className="text-green-600 font-bold text-lg">
                 ${product.discountPrice}
               </p>
             </div>

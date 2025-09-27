@@ -20,7 +20,7 @@ const DiscountSlider = () => {
       .then((resp) => {
         const discounted = resp.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }))
-          .filter((p) => p.discountPrice); // solo productos con rebaja
+          .filter((p) => p.discountPrice); // filtrar solo productos con descuento
         setProducts(discounted);
       })
       .catch((error) =>
@@ -66,7 +66,7 @@ const DiscountSlider = () => {
                     <p className="text-gray-500 text-sm line-through">
                       ${product.price}
                     </p>
-                    <p className="text-lg font-bold text-red-600">
+                    <p className="text-lg font-bold text-green-600">
                       ${product.discountPrice}
                     </p>
                   </div>

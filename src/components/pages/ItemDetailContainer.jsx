@@ -10,7 +10,7 @@ const ItemDetailContainer = () => {
   const { itemId } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedSize, setSelectedSize] = useState(""); // talle seleccionado
+  const [selectedSize, setSelectedSize] = useState("");
   const { addItem } = useCart();
 
   useEffect(() => {
@@ -59,6 +59,9 @@ const ItemDetailContainer = () => {
     });
   };
 
+  const hasDiscount =
+    product.discountPrice && product.discountPrice < product.price;
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-10">
       {/* Título */}
@@ -80,18 +83,31 @@ const ItemDetailContainer = () => {
         {/* Detalles */}
         <div className="lg:w-1/2 flex flex-col gap-3">
           <p className="text-gray-700 text-lg">{product.description}</p>
-          <div className="flex flex-row gap-2">
-            <p className="text-2xl font-bold text-black">
-              Precio: ${product.price}
+
+          {/* Precios */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+            {hasDiscount ? (
+              <>
+                <p className="text-gray-500 line-through text-lg">
+                  ${product.price}
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  ${product.discountPrice}
+                </p>
+              </>
+            ) : (
+              <p className="text-2xl font-bold text-black">
+                ${product.price}
+              </p>
+            )}
+            <p className="text-sm text-green-600 font-bold">
+              Stock disponible: {product.stock}
             </p>
-            <p className=" text-sm text-green-600 font-bold">
-              Stock disponible: {product.stock} 
-            </p>
-          </div> 
+          </div>
 
           {/* Selector de talles */}
           {product.sizes && product.sizes.length > 0 && (
-            <div >
+            <div>
               <p className="font-semibold mb-1">Selecciona tu talle:</p>
               <div className="flex gap-2 flex-wrap">
                 {product.sizes.map((size) => (
