@@ -9,7 +9,7 @@ const HomeBanner = () => {
         exclusivos.
       </p>
       <a
-        href="/Category/Verano"
+        href="/category/Verano"
         className="inline-block px-6 py-3 bg-[#E6CA4D] text-black font-semibold rounded-md hover:bg-yellow-500 transition-colors duration-200"
       >
         Ver colección
