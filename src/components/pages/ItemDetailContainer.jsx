@@ -35,7 +35,7 @@ const ItemDetailContainer = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[70vh] flex-col gap-8">
-        <p className="text-4xl text-black font-bold">Cargando el producto</p>
+        <p className="text-2xl sm:text-4xl text-black font-bold">Cargando el producto</p>
         <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
