@@ -75,11 +75,11 @@ const ItemListContainer = ({ mensaje }) => {
         </h3>
       </div>
 
-      {/* GRID responsive */}
+      {/* renderizado de productos */}
       <div className="flex flex-wrap justify-center gap-6 px-4 sm:px-6 lg:px-10 mb-6">
         {currentProducts.map((product) => (
           <div
-            className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 flex justify-center"
+            className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5 flex justify-center"
             key={product.id}
           >
             <CardProduct product={product} />

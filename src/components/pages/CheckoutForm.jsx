@@ -7,6 +7,13 @@ import useCart from "../../context/useCart";
 const CheckoutForm = () => {
   const { cart, clearCart } = useCart();
   const [buyer, setBuyer] = useState({ name: "", email: "", phone: "" });
+  const [shipping, setShipping] = useState({
+    pais: "",
+    codigoPostal: "",
+    calle: "",
+    numero: "",
+    piso: "",
+  });
   const [orderId, setOrderId] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,21 +26,31 @@ const CheckoutForm = () => {
     0
   );
 
-  const handleChange = (e) => {
+  const handleBuyerChange = (e) => {
     setBuyer({ ...buyer, [e.target.name]: e.target.value });
+  };
+
+  const handleShippingChange = (e) => {
+    setShipping({ ...shipping, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!buyer.name || !buyer.email || !buyer.phone) {
-      setError("Por favor completa todos los campos.");
+      setError("Por favor completa todos los datos del comprador.");
       return;
     }
+    if (!shipping.pais || !shipping.codigoPostal || !shipping.calle || !shipping.numero) {
+      setError("Por favor completa todos los datos de envío obligatorios.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
     const order = {
       buyer,
+      shipping,
       items: cart.map(({ product, quantity }) => ({
         id: product.id,
         title: product.title,
@@ -64,48 +81,102 @@ const CheckoutForm = () => {
       <div className="px-2">
         <form
           onSubmit={handleSubmit}
-          className="max-w-md mx-auto  p-6 bg-white rounded-xl shadow-2xl my-10 flex flex-col gap-4"
+          className="max-w-lg mx-auto p-6 bg-white rounded-xl shadow-2xl my-10 flex flex-col gap-4"
         >
-          <h2 className="text-4xl font-bold text-center mb-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
             Finalizar compra
           </h2>
           {error && <p className="text-red-500 font-semibold">{error}</p>}
 
-          <label className="flex flex-col text-gray-700 font-medium">
-            Nombre completo:
+          {/* Datos del comprador */}
+          <h3 className="text-xl font-semibold mt-2 mb-1 text-gray-800">
+            Datos del comprador
+          </h3>
+
+          <input
+            type="text"
+            name="name"
+            value={buyer.name}
+            onChange={handleBuyerChange}
+            placeholder="Nombre completo"
+            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+
+          <input
+            type="email"
+            name="email"
+            value={buyer.email}
+            onChange={handleBuyerChange}
+            placeholder="Correo electrónico"
+            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+
+          <input
+            type="tel"
+            name="phone"
+            value={buyer.phone}
+            onChange={handleBuyerChange}
+            placeholder="Teléfono"
+            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+
+          {/* Datos de envío */}
+          <h3 className="text-xl font-semibold mt-4 mb-1 text-gray-800">
+            Datos de envío
+          </h3>
+
+          <input
+            type="text"
+            name="pais"
+            value={shipping.pais}
+            onChange={handleShippingChange}
+            placeholder="País"
+            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+
+          <input
+            type="text"
+            name="codigoPostal"
+            value={shipping.codigoPostal}
+            onChange={handleShippingChange}
+            placeholder="Código Postal"
+            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+
+          <input
+            type="text"
+            name="calle"
+            value={shipping.calle}
+            onChange={handleShippingChange}
+            placeholder="Calle"
+            className="p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            required
+          />
+
+          <div className="flex gap-2">
             <input
               type="text"
-              name="name"
-              value={buyer.name}
-              onChange={handleChange}
-              className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              name="numero"
+              value={shipping.numero}
+              onChange={handleShippingChange}
+              placeholder="Número"
+              className="w-1/2 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
               required
             />
-          </label>
-
-          <label className="flex flex-col text-gray-700 font-medium">
-            Email:
             <input
-              type="email"
-              name="email"
-              value={buyer.email}
-              onChange={handleChange}
-              className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              required
+              type="text"
+              name="piso"
+              value={shipping.piso}
+              onChange={handleShippingChange}
+              placeholder="Piso (opcional)"
+              className="w-1/2 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
-          </label>
-
-          <label className="flex flex-col text-gray-700 font-medium">
-            Teléfono:
-            <input
-              type="tel"
-              name="phone"
-              value={buyer.phone}
-              onChange={handleChange}
-              className="mt-1 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              required
-            />
-          </label>
+          </div>
 
           <button
             type="submit"
@@ -124,7 +195,9 @@ const CheckoutForm = () => {
             <h2 className="text-2xl font-bold mb-4">¡Gracias por tu compra!</h2>
             <p className="text-lg mb-6">
               Tu número de orden es:{" "}
-              <strong className="bg-amber-400">{orderId}</strong>
+              <strong className="bg-amber-400 px-2 py-1 rounded">
+                {orderId}
+              </strong>
             </p>
             <button
               onClick={() => {
