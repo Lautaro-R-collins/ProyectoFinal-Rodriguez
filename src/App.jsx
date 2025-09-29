@@ -9,16 +9,15 @@ import Cart from "./components/pages/Cart";
 import CheckoutForm from "./components/pages/CheckoutForm";
 import CarruselText from "./components/common/CarruselText";
 import CarruselImg from "./components/common/CarruselImg";
-import Features from "./components/common/Features.jsx";
 import HomeBanner from "./components/common/HomeBanner.jsx";
 import BackFeatures from "./components/common/BackFeatures.jsx";
+import Favorite from "./components/pages/Favorite.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <BrowserRouter>
-    
       <NavBar />
       <CarruselText />
       <Routes>
@@ -51,7 +50,7 @@ function App() {
           path="/item/:itemId"
           element={
             <MainLayout>
-              <ItemDetailContainer />            
+              <ItemDetailContainer />
             </MainLayout>
           }
         />
@@ -74,7 +73,15 @@ function App() {
           }
         />
 
-        {/* Ruta 404 */}
+        <Route
+          path="/favorites"
+          element={
+            <MainLayout>
+              <Favorite />
+            </MainLayout>
+          }
+        />
+
         <Route
           path="*"
           element={
@@ -86,7 +93,6 @@ function App() {
       </Routes>
       <ToastContainer position="top-right" autoClose={2000} />
     </BrowserRouter>
-    
   );
 }
 
