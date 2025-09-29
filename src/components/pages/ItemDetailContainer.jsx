@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import ItemCount from "../common/ItemCount";
 import { db } from "../../services/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import useCart from "../../context/useCart";
 import { toast } from "react-toastify";
 
 const ItemDetailContainer = () => {
   const { itemId } = useParams();
   const [product, setProduct] = useState(null);
+  const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState("");
   const { addItem } = useCart();
@@ -18,9 +26,24 @@ const ItemDetailContainer = () => {
 
     setLoading(true);
     getDoc(productRef)
-      .then((resp) => {
+      .then(async (resp) => {
         if (resp.exists()) {
-          setProduct({ id: resp.id, ...resp.data() });
+          const data = { id: resp.id, ...resp.data() };
+          setProduct(data);
+
+          // buscar productos relacionados por categoría
+          if (data.category) {
+            const productsRef = collection(db, "products");
+            const q = query(
+              productsRef,
+              where("category", "==", data.category)
+            );
+            const relatedSnap = await getDocs(q);
+            const relatedProducts = relatedSnap.docs
+              .map((doc) => ({ id: doc.id, ...doc.data() }))
+              .filter((p) => p.id !== data.id);
+            setRelated(relatedProducts);
+          }
         } else {
           setProduct(null);
         }
@@ -96,9 +119,7 @@ const ItemDetailContainer = () => {
                 </p>
               </>
             ) : (
-              <p className="text-2xl font-bold text-black">
-                ${product.price}
-              </p>
+              <p className="text-2xl font-bold text-black">${product.price}</p>
             )}
             <p className="text-sm text-green-600 font-bold">
               Stock disponible: {product.stock}
@@ -137,6 +158,49 @@ const ItemDetailContainer = () => {
           </div>
         </div>
       </div>
+
+      {/* Productos relacionados */}
+      {related.length > 0 && (
+        <div className="mt-16">
+          <h3 className="text-2xl font-bold text-center mb-8">
+            Productos relacionados
+          </h3>
+          <div className="flex flex-wrap justify-center gap-6">
+            {related.slice(0, 4).map((item) => (
+              <Link
+                to={`/item/${item.id}`}
+                key={item.id}
+                className="bg-white rounded-xl shadow-md overflow-hidden max-w-[200px] w-full hover:scale-105 transition-transform"
+              >
+                <img
+                  src={item.imageUrl || "https://via.placeholder.com/200"}
+                  alt={item.title}
+                  className="w-full h-40 object-cover bg-gray-100"
+                />
+                <div className="p-3 text-center">
+                  <h4 className="text-sm font-semibold truncate">
+                    {item.title}
+                  </h4>
+                  {item.discountPrice ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <p className="text-gray-500 line-through text-xs">
+                        ${item.price}
+                      </p>
+                      <p className="text-sm font-bold text-green-600">
+                        ${item.discountPrice}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm font-bold text-black">
+                      ${item.price}
+                    </p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

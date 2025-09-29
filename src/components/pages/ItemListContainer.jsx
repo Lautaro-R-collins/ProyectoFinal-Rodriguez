@@ -28,7 +28,7 @@ const ItemListContainer = ({ mensaje }) => {
           ...doc.data(),
         }));
         setProducts(productsFirebase);
-        setCurrentPage(1); 
+        setCurrentPage(1);
       })
       .catch((error) => console.error("Error cargando productos:", error))
       .finally(() => setLoading(false));
@@ -37,7 +37,9 @@ const ItemListContainer = ({ mensaje }) => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[70vh] flex-col gap-8">
-        <p className="text-2xl sm:text-4xl text-black font-bold">Cargando Productos</p>
+        <p className="text-2xl sm:text-4xl text-black font-bold">
+          Cargando Productos
+        </p>
         <div className="w-16 h-16 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
