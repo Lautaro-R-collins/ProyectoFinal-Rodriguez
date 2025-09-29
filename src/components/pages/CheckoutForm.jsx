@@ -40,7 +40,12 @@ const CheckoutForm = () => {
       setError("Por favor completa todos los datos del comprador.");
       return;
     }
-    if (!shipping.pais || !shipping.codigoPostal || !shipping.calle || !shipping.numero) {
+    if (
+      !shipping.pais ||
+      !shipping.codigoPostal ||
+      !shipping.calle ||
+      !shipping.numero
+    ) {
       setError("Por favor completa todos los datos de envío obligatorios.");
       return;
     }
