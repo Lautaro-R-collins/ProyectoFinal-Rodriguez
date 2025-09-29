@@ -5,7 +5,7 @@ import { FaTimes, FaTrashAlt } from "react-icons/fa";
 const CartDrawer = ({ isOpen, onClose }) => {
   const { cart, removeItem, clearCart } = useCart();
 
-  // Calcular total considerando el precio con descuento si existe
+  // Calculo total 
   const totalPrice = cart.reduce((acc, item) => {
     const priceToUse = item.product.discountPrice || item.product.price;
     return acc + priceToUse * item.quantity;
