@@ -1,5 +1,4 @@
-import { BiWorld } from "react-icons/bi";
-import { FaTruck, FaRegCreditCard} from "react-icons/fa";
+import { FaTruck, FaRegCreditCard } from "react-icons/fa";
 import { HiOutlineRefresh } from "react-icons/hi";
 import CardFeature from "./CardFeature";
 
