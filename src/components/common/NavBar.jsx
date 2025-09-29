@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import CartWidget from "./CartWidget";
 import CartDrawer from "../pages/Cart";
 import logoUrban from "../../assets/Logo/logoUrban.png";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaHeart } from "react-icons/fa";
+import FavoritesWidget from "./FavoritesWidget";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,63 +20,118 @@ const NavBar = () => {
           </Link>
 
           {/* Menú Desktop */}
-          <div className="hidden md:flex items-center flex-1 justify-center">
+          <div className="hidden md:flex items-center flex-1 justify-center gap-4">
             <ul className="flex gap-2 list-none m-0 p-0">
               <li>
-                <Link to="/" className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold">
+                <Link
+                  to="/"
+                  className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold"
+                >
                   Inicio
                 </Link>
               </li>
               <li>
-                <Link to="/category/Camisas" className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold">
-                  Camisas
-                </Link>
-              </li>
-              <li>
-                <Link to="/category/Remeras" className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold">
+                <Link
+                  to="/category/Remeras"
+                  className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold"
+                >
                   Remeras
                 </Link>
               </li>
               <li>
-                <Link to="/category/Pantalones" className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold">
+                <Link
+                  to="/category/Pantalones"
+                  className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold"
+                >
                   Pantalones
                 </Link>
               </li>
               <li>
-                <Link to="/category/Accesorios" className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold">
+                <Link
+                  to="/category/Camisas"
+                  className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold"
+                >
+                  Camisas
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/category/Accesorios"
+                  className="hover:bg-[#E6CA4D] hover:text-black p-4 rounded font-bold"
+                >
                   Accesorios
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Menú Mobile (hamburguesa + carrito) */}
+          {/* Iconos (Carrito + Favoritos) */}
+          <div className="hidden md:flex items-center gap-6">
+            <FavoritesWidget />
+            <CartWidget onOpen={() => setIsCartOpen(true)} />
+          </div>
+
+          {/* Menú Mobile (hamburguesa + carrito + favoritos) */}
           <div className="flex items-center gap-4 md:hidden">
-            <CartWidget onOpen={() => setIsCartOpen(true)} /> 
+            <CartWidget onOpen={() => setIsCartOpen(true)} />
+            <FavoritesWidget />
             <button className="text-2xl" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <FaTimes /> : <FaBars />}
             </button>
-          </div>
-
-          {/* Carrito Desktop */}
-          <div className="hidden md:block ml-4">
-            <CartWidget onOpen={() => setIsCartOpen(true)} /> 
           </div>
         </div>
 
         {/* Menú Mobile desplegable */}
         {isOpen && (
           <ul className="md:hidden flex flex-col bg-black px-6 pb-4 text-center">
-            <li><Link to="/" onClick={() => setIsOpen(false)} className="hover:text-gray-300 font-bold py-2 block">Inicio</Link></li>
-            <li><Link to="/category/Camisas" onClick={() => setIsOpen(false)} className="hover:text-gray-300 font-bold py-2 block">Camisas</Link></li>
-            <li><Link to="/category/Remeras" onClick={() => setIsOpen(false)} className="hover:text-gray-300 font-bold py-2 block">Remeras</Link></li>
-            <li><Link to="/category/Pantalones" onClick={() => setIsOpen(false)} className="hover:text-gray-300 font-bold py-2 block">Pantalones</Link></li>
-            <li><Link to="/category/Accesorios" onClick={() => setIsOpen(false)} className="hover:text-gray-300 font-bold py-2 block">Accesorios</Link></li>
+            <li>
+              <Link
+                to="/"
+                onClick={() => setIsOpen(false)}
+                className="hover:text-gray-300 font-bold py-2 block"
+              >
+                Inicio
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/category/Camisas"
+                onClick={() => setIsOpen(false)}
+                className="hover:text-gray-300 font-bold py-2 block"
+              >
+                Camisas
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/category/Remeras"
+                onClick={() => setIsOpen(false)}
+                className="hover:text-gray-300 font-bold py-2 block"
+              >
+                Remeras
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/category/Pantalones"
+                onClick={() => setIsOpen(false)}
+                className="hover:text-gray-300 font-bold py-2 block"
+              >
+                Pantalones
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/category/Accesorios"
+                onClick={() => setIsOpen(false)}
+                className="hover:text-gray-300 font-bold py-2 block"
+              >
+                Accesorios
+              </Link>
+            </li>
           </ul>
         )}
       </nav>
-
-      {/* Drawer del carrito */}
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
