@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { db } from "../../services/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import { FaHeart } from "react-icons/fa";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useFavorites from "../../context/useFavorites";
 
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -12,6 +16,7 @@ import "swiper/css/navigation";
 
 const DiscountSlider = () => {
   const [products, setProducts] = useState([]);
+  const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
 
   useEffect(() => {
     const productsRef = collection(db, "products");
@@ -20,7 +25,7 @@ const DiscountSlider = () => {
       .then((resp) => {
         const discounted = resp.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }))
-          .filter((p) => p.discountPrice); // filtrar solo productos con descuento
+          .filter((p) => p.discountPrice); // filtrado de productos con descuento
         setProducts(discounted);
       })
       .catch((error) =>
@@ -28,12 +33,22 @@ const DiscountSlider = () => {
       );
   }, []);
 
+  const toggleFavorite = (product) => {
+    if (isFavorite(product.id)) {
+      removeFromFavorites(product.id);
+      toast.info(`${product.title} removido de favoritos`);
+    } else {
+      addToFavorites(product);
+      toast.success(`${product.title} agregado a favoritos`);
+    }
+  };
+
   if (products.length === 0) return null;
 
   return (
     <div className="relative my-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-10">
       <h2 className="text-3xl text-black font-bold text-center mb-6">
-        Ofertas del dia
+        Ofertas del día
       </h2>
 
       <div className="relative max-w-6xl mx-auto bg-white rounded-2xl shadow-md p-6 md:p-10">
@@ -52,12 +67,27 @@ const DiscountSlider = () => {
         >
           {products.map((product) => (
             <SwiperSlide key={product.id} className="flex justify-center">
-              <div className="bg-white rounded-xl shadow-md overflow-hidden max-w-[220px] w-full">
+              <div className="relative bg-white rounded-xl shadow-md overflow-hidden max-w-[220px] w-full">
+                {/* Botón de favoritos */}
+                <button
+                  onClick={() => toggleFavorite(product)}
+                  className="absolute top-2 right-2 z-10 text-lg cursor-pointer hover:scale-110 transition-transform duration-200"
+                >
+                  <FaHeart
+                    className={
+                      isFavorite(product.id) ? "text-red-500" : "text-gray-300"
+                    }
+                  />
+                </button>
+
+                {/* Imagen */}
                 <img
                   src={product.imageUrl || "https://via.placeholder.com/200"}
                   alt={product.title}
                   className="w-full h-40 object-cover bg-gray-100"
                 />
+
+                {/* Contenido */}
                 <div className="p-3 flex flex-col gap-2">
                   <h3 className="text-sm font-semibold truncate text-center">
                     {product.title}
